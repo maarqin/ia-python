@@ -15,17 +15,17 @@ class MundoAspiradorPo():
 
     def __init__(self):
         self.posAspirador = 0
-        self.aposentos = [SUJO, SUJO]
+        self.aposentos = [MundoAspiradorPo.SUJO, MundoAspiradorPo.SUJO]
 
     def isFimJogo(self):
-        return not SUJO in self.aposentos 
+        return not MundoAspiradorPo.SUJO in self.aposentos 
 
     def processarJogada(self, jogada):
-        if jogada == ASPIRAR:
-            self.aposentos[self.posAspirador] = LIMPO
+        if jogada == MundoAspiradorPo.ASPIRAR:
+            self.aposentos[self.posAspirador] = MundoAspiradorPo.LIMPO
         else:
-            jogada += 1 if jogada == MOVER_DIREITA else -1
-            jogada = max(0, min(jogada, 1))
+            self.posAspirador += 1 if jogada == MundoAspiradorPo.MOVER_DIREITA else -1
+            self.posAspirador = max(0, min(self.posAspirador, 1))
 
     def buildVisaoMundo(self):
         return VisaoAspirador(self)
@@ -35,14 +35,15 @@ class JogadorHumano():
     _jogadas = {
             'd' : MundoAspiradorPo.MOVER_DIREITA,
             'a' : MundoAspiradorPo.MOVER_ESQUERDA,
-            's' : MundoAspiradorPo.ASPIRAR
-    }
+            's' : MundoAspiradorPo.ASPIRAR }
     
     def __init__(self):
         pass
     
     def render(self, visaoMundo):
-        print("[" + "|".join('X' if aposento == SUJO else '0' for aposento in visaoMundo.aposentos) + "]" )
+        print("[{}]:{}".format( "|".join('X' if aposento == MundoAspiradorPo.SUJO else '0' 
+        for aposento in visaoMundo.aposentos), 
+        visaoMundo.posAspirador))
 
     def escolherJogada(self, visaoMundo):
         self.render(visaoMundo)
@@ -50,7 +51,7 @@ class JogadorHumano():
         while not entrada in('a', 's', 'd'):
             entrada = input("Escolha sua jogada (a/s/d): ")
         
-        return _jogadas[entrada]
+        return JogadorHumano._jogadas[entrada]
 
 def game(mundo):
     while not mundo.isFimJogo():
