@@ -1,3 +1,5 @@
+import aspirador
+
 if __name__ == "__main__":
     print("Esta classe não é para ser rodada")
     exit(-1)
@@ -6,7 +8,7 @@ class ProblemaAspirador():
 
     @staticmethod
     def getEstadoInicial():
-        pass
+        return aspirador.MundoAspiradorPo(SUJO, SUJO, 0)
     
     @staticmethod
     def acoesPossiveisEm(estado):
